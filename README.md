@@ -2,6 +2,7 @@
 # python-dependency-resolver
 
 
+## Install
 **From PyPI**
 ```commandline
 pip install python-dependency-resolver
@@ -14,7 +15,9 @@ python3 setup.py bdist_wheel
 pip3 install -I dist/python_dependency_resolver-*-py3-none-any.whl
 ```
 
-**How to use**
+## How to use
+
+***Use case 1***
 ```mermaid
 flowchart TD
     B --> A
@@ -45,6 +48,24 @@ tree = {
 dependency_resolver = DependencyResolver()
 dependency_resolver.resolve(tree)
 # ['A', 'B', 'C', 'D', 'E', 'G', 'F']
+```
+
+***Use case 2***
+```mermaid
+flowchart TD
+    B --> A
+    A --> B
+```
+```python
+from python_dependency_resolver import DependencyResolver
+tree = {
+    'A': ('B'),
+    'B': ('A')
+}
+
+dependency_resolver = DependencyResolver()
+dependency_resolver.resolve(tree)
+# CircularReferenceException: Circular reference detected: B -> A
 ```
 
 **Documentation**
