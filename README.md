@@ -1,3 +1,4 @@
+[![Python Application](https://github.com/anthonykgross/python-dependency-resolver/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/anthonykgross/python-dependency-resolver/actions/workflows/main.yml)
 # Python-workflow
 
 ```commandline
