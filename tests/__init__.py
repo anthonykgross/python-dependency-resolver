@@ -1,5 +1,6 @@
 import unittest
 from python_dependency_resolver import DependencyResolver
+from python_dependency_resolver.exceptions import CircularReferenceException
 
 
 class DependencyResolverTestCase(unittest.TestCase):
@@ -55,7 +56,7 @@ class DependencyResolverTestCase(unittest.TestCase):
         }
 
         dependency_resolver = DependencyResolver()
-        with self.assertRaises(Exception) as e:
+        with self.assertRaises(CircularReferenceException) as e:
             r = dependency_resolver.resolve(tree)
         self.assertEqual(str(e.exception), 'Circular reference detected: B -> A')
 

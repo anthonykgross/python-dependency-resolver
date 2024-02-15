@@ -1,3 +1,6 @@
+from python_dependency_resolver.exceptions import CircularReferenceException
+
+
 class DependencyResolver:
     def __init__(self, *args, **kwargs):
         self.raise_errors = kwargs.get('raise_errors', True)
@@ -28,7 +31,8 @@ class DependencyResolver:
             if e not in resolved:
                 if e in unresolved:
                     if self.raise_errors:
-                        raise Exception('Circular reference detected: %s -> %s' % (n, e))
+                        raise CircularReferenceException(n, e)
+                    # avoid infinite loop
                     return
                 self.resolver(e, node, resolved, unresolved)
 
