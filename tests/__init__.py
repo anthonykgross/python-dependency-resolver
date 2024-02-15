@@ -1,6 +1,6 @@
 import unittest
 from python_dependency_resolver import DependencyResolver
-from python_dependency_resolver.exceptions import CircularReferenceException
+from python_dependency_resolver.exceptions import CircularReferenceException, MissingReferenceException
 
 
 class DependencyResolverTestCase(unittest.TestCase):
@@ -43,6 +43,27 @@ class DependencyResolverTestCase(unittest.TestCase):
         dependency_resolver = DependencyResolver()
         r = dependency_resolver.resolve(tree)
         self.assertEqual(r[0], ['D', 'C', 'A', 'B'])
+
+    def test_missing_dependency(self):
+        tree = {
+            'A': (),
+            'B': ('A'),
+            'C': ('B', 'A'),
+            'D': ('C', 'A'),
+            'E': ('C', 'B'),
+            'F': ('G'),
+            # 'G': ()
+        }
+
+        dependency_resolver = DependencyResolver()
+        with self.assertRaises(MissingReferenceException) as e:
+            r = dependency_resolver.resolve(tree)
+        self.assertEqual(str(e.exception), 'Missing reference detected: G')
+
+        dependency_resolver = DependencyResolver(raise_errors=False)
+        r = dependency_resolver.resolve(tree)
+        self.assertEqual(r[0], ['A', 'B', 'C', 'D', 'E', 'F'])
+        self.assertEqual(r[1], ['G'])
 
     """
          < ------|

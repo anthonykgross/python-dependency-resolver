@@ -1,4 +1,4 @@
-from python_dependency_resolver.exceptions import CircularReferenceException
+from python_dependency_resolver.exceptions import CircularReferenceException, MissingReferenceException
 
 
 class DependencyResolver:
@@ -27,6 +27,12 @@ class DependencyResolver:
 
     def resolver(self, n, node, resolved=None, unresolved=None):
         unresolved.append(n)
+
+        if n not in node.keys():
+            if self.raise_errors:
+                raise MissingReferenceException(n)
+            return
+
         for e in node[n]:
             if e not in resolved:
                 if e in unresolved:

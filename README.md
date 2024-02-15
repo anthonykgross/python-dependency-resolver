@@ -68,6 +68,25 @@ dependency_resolver.resolve(tree)
 # CircularReferenceException: Circular reference detected: B -> A
 ```
 
+***Use case 3***
+```mermaid
+flowchart TD
+    B --> A
+    C --> A
+```
+```python
+from python_dependency_resolver import DependencyResolver
+tree = {
+    'B': ('A'),
+    'C': ('A'),
+    #'A': ()
+}
+
+dependency_resolver = DependencyResolver()
+dependency_resolver.resolve(tree)
+# MissingReferenceException: Missing reference detected: A
+```
+
 **Documentation**
 - <https://www.electricmonk.nl/log/2008/08/07/dependency-resolving-algorithm/>
 - <http://mamchenkov.net/wordpress/2016/11/22/dependency-resolution-with-graphs-in-php/>
