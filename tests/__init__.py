@@ -85,3 +85,16 @@ class DependencyResolverTestCase(unittest.TestCase):
         r = dependency_resolver.resolve(tree)
         self.assertEqual(r[0], ['A', 'B'])
         self.assertEqual(r[1], ['B'])
+
+    def test_performance(self):
+        max = 10 ** 5
+
+        tree = {}
+        for i in range(0, max):
+            tree[str(i)] = (str(i+1),)
+        tree[str(max)] = ()
+
+        dependency_resolver = DependencyResolver()
+        with self.assertRaises(Exception) as e:
+            r = dependency_resolver.resolve(tree)
+        self.assertEqual(str(e.exception), 'maximum recursion depth exceeded while calling a Python object')
