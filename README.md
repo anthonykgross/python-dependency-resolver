@@ -1,12 +1,20 @@
 [![Python Application](https://github.com/anthonykgross/python-dependency-resolver/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/anthonykgross/python-dependency-resolver/actions/workflows/main.yml)
-# Python-workflow
+# python-workflow
 
+
+**From PyPI**
+```commandline
+pip install python-dependency-resolver
+```
+
+**From source**
 ```commandline
 rm build/ python_dependency_resolver.egg-info dist -Rf
 python3 setup.py bdist_wheel
 pip3 install -I dist/python_dependency_resolver-*-py3-none-any.whl
 ```
 
+**How to use**
 ```mermaid
 flowchart TD
     B --> A
