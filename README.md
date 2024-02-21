@@ -101,4 +101,4 @@ dependency_resolver.resolve(tree)
 - <https://github.com/JoshuaBehrens>
 
 ## Copyright and license
-Code and documentation copyright 2024. Code released under [the MIT license](https://github.com/anthonykgross/python-dependency-resolver/blob/master/LICENSE).
+Code and documentation copyright 2024. Code released under [the MIT license](https://github.com/anthonykgross/python-dependency-resolver/blob/main/LICENSE).
