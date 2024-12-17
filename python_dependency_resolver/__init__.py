@@ -5,7 +5,7 @@ from python_dependency_resolver.exceptions import CircularReferenceException, \
     RecursionLimitException
 
 
-VERSION = (1, 0, 3)
+VERSION = (1, 0, 4)
 
 def get_version():
     return ".".join(map(str, VERSION))

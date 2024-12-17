@@ -57,6 +57,8 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
 
   updating-docs:
+    if: github.event_name == 'release' && github.event.release.target_commitish == 'main'
+    needs: [ publishing ]
     runs-on: ubuntu-latest
 
     permissions:
