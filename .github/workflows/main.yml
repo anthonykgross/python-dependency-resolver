@@ -58,7 +58,6 @@ jobs:
 
   updating-docs:
     if: github.event_name == 'release' && github.event.release.target_commitish == 'main'
-    needs: [ publishing ]
     runs-on: ubuntu-latest
 
     permissions:
