@@ -36,13 +36,13 @@ flowchart TD
 ```python
 from python_dependency_resolver import DependencyResolver
 tree = {
-    'A': (),
-    'B': ('A'),
-    'C': ('B', 'A'),
-    'D': ('C', 'A'),
-    'E': ('C', 'B'),
-    'F': ('G'),
-    'G': ()
+    'A': [],
+    'B': ['A'],
+    'C': ['B', 'A'],
+    'D': ['C', 'A'],
+    'E': ['C', 'B'],
+    'F': ['G'],
+    'G': []
 }
 
 dependency_resolver = DependencyResolver()
@@ -59,8 +59,8 @@ flowchart TD
 ```python
 from python_dependency_resolver import DependencyResolver
 tree = {
-    'A': ('B'),
-    'B': ('A')
+    'A': ['B'],
+    'B': ['A']
 }
 
 dependency_resolver = DependencyResolver()
@@ -77,8 +77,8 @@ flowchart TD
 ```python
 from python_dependency_resolver import DependencyResolver
 tree = {
-    'B': ('A'),
-    'C': ('A'),
+    'B': ['A'],
+    'C': ['A'],
     #'A': ()
 }
 

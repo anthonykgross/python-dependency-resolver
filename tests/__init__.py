@@ -1,3 +1,4 @@
+import sys
 import unittest
 from python_dependency_resolver import DependencyResolver
 from python_dependency_resolver.exceptions import CircularReferenceException, MissingReferenceException
@@ -13,13 +14,13 @@ class DependencyResolverTestCase(unittest.TestCase):
 
     def test_resolve(self):
         tree = {
-            'A': (),
-            'B': ('A'),
-            'C': ('B', 'A'),
-            'D': ('C', 'A'),
-            'E': ('C', 'B'),
-            'F': ('G'),
-            'G': ()
+            'A': [],
+            'B': ['A'],
+            'C': ['B', 'A'],
+            'D': ['C', 'A'],
+            'E': ['C', 'B'],
+            'F': ['G'],
+            'G': []
         }
 
         dependency_resolver = DependencyResolver()
@@ -34,10 +35,10 @@ class DependencyResolverTestCase(unittest.TestCase):
     """
     def test_resolve_graph(self):
         tree = {
-            'A': ('C'),
-            'B': ('C'),
-            'C': ('D'),
-            'D': (),
+            'A': ['C'],
+            'B': ['C'],
+            'C': ['D'],
+            'D': [],
         }
 
         dependency_resolver = DependencyResolver()
@@ -46,18 +47,18 @@ class DependencyResolverTestCase(unittest.TestCase):
 
     def test_missing_dependency(self):
         tree = {
-            'A': (),
-            'B': ('A'),
-            'C': ('B', 'A'),
-            'D': ('C', 'A'),
-            'E': ('C', 'B'),
-            'F': ('G'),
-            # 'G': ()
+            'A': [],
+            'B': ['A'],
+            'C': ['B', 'A'],
+            'D': ['C', 'A'],
+            'E': ['C', 'B'],
+            'F': 'G',
+            # 'G': []
         }
 
         dependency_resolver = DependencyResolver()
         with self.assertRaises(MissingReferenceException) as e:
-            r = dependency_resolver.resolve(tree)
+            dependency_resolver.resolve(tree)
         self.assertEqual(str(e.exception), 'Missing reference detected: G')
 
         dependency_resolver = DependencyResolver(raise_errors=False)
@@ -72,13 +73,13 @@ class DependencyResolverTestCase(unittest.TestCase):
     """
     def test_circular_dependency(self):
         tree = {
-            'A': ('B'),
-            'B': ('A'),
+            'A': ['B'],
+            'B': ['A'],
         }
 
         dependency_resolver = DependencyResolver()
         with self.assertRaises(CircularReferenceException) as e:
-            r = dependency_resolver.resolve(tree)
+            dependency_resolver.resolve(tree)
         self.assertEqual(str(e.exception), 'Circular reference detected: B -> A')
 
         dependency_resolver = DependencyResolver(raise_errors=False)
@@ -86,15 +87,23 @@ class DependencyResolverTestCase(unittest.TestCase):
         self.assertEqual(r[0], ['A', 'B'])
         self.assertEqual(r[1], ['B'])
 
-    def test_performance(self):
-        max = 10 ** 5
+    def test_wrong_node_type(self):
+        dependency_resolver = DependencyResolver()
+        with self.assertRaises(Exception) as e:
+            dependency_resolver.resolve(None)
+        self.assertEqual(str(e.exception), '`node` me be a dict.')
+
+
+    def test_maximum_recursion(self):
+        n = 10 ** 4
+        sys.setrecursionlimit(int(10000))
 
         tree = {}
-        for i in range(0, max):
+        for i in range(1, n):
             tree[str(i)] = (str(i+1),)
-        tree[str(max)] = ()
+        tree[str(n)] = ()
 
         dependency_resolver = DependencyResolver()
         with self.assertRaises(Exception) as e:
-            r = dependency_resolver.resolve(tree)
-        self.assertEqual(str(e.exception), 'maximum recursion depth exceeded while calling a Python object')
+            dependency_resolver.resolve(tree)
+        self.assertEqual(str(e.exception), 'You have to increase your `recursionlimit`(current: 10000): import sys; sys.setrecursionlimit(10100)')
